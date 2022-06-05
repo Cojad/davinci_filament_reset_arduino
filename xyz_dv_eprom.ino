@@ -49,25 +49,25 @@ Pinout looking at the pads on the EEPROM board
 #define CODE 0x00 //1 Byte
 #define MATERIAL 0x01 //1 Byte
 #define COLOR 0x02  //2 Bytes
-#define DATE 0x05	//4 Bytes
+#define DATE 0x05  //4 Bytes
 #define TOTALLEN 0x08 //4 Bytes
 #define NEWLEN 0x0C //4 Bytes
-#define HEADTEMP 0x10	//2 Bytes
-#define BEDTEMP 0x12	//2Bytes
-#define MLOC 0x14	//2 Bytes
-#define DLOC 0x16	//2 Bytes
-#define SN 0x18		//12 Bytes
-#define CRC 0x24	//2 Bytes
-#define LEN2 0x34	//4 Bytes
+#define HEADTEMP 0x10 //2 Bytes
+#define BEDTEMP 0x12  //2Bytes
+#define MLOC 0x14 //2 Bytes
+#define DLOC 0x16 //2 Bytes
+#define SN 0x18   //12 Bytes
+#define CRC 0x24  //2 Bytes
+#define LEN2 0x34 //4 Bytes
 
 void IncrementSerial(unsigned char * cArray, long lAddress, long lSize)
 {
-	unsigned char szTempBuffer[20] = {0};
-	memcpy(szTempBuffer,&cArray[lAddress],lSize);
-	long lSerial = atol((char *)szTempBuffer);
-	lSerial++;
-	sprintf((char *)szTempBuffer,"%04d",lSerial);
-	memcpy(&cArray[lAddress],szTempBuffer,lSize);
+  unsigned char szTempBuffer[20] = {0};
+  memcpy(szTempBuffer,&cArray[lAddress],lSize);
+  long lSerial = atol((char *)szTempBuffer);
+  lSerial++;
+  sprintf((char *)szTempBuffer,"%04d",lSerial);
+  memcpy(&cArray[lAddress],szTempBuffer,lSize);
 }
 
 class NanodeUNIO {
@@ -382,9 +382,9 @@ Verified with firmware 1.1.I
 
 // Value to write to the EEPROM for remaining filament lenght
 // Default Starter Cartdridge is 120m
-char x[] = {0xc0,0xd4,0x01,0x00}; //120m
+//char x[] = {0xc0,0xd4,0x01,0x00}; //120m
 //char x[] = {0x80,0xa9,0x03,0x00}; //240m
-//char x[] = {0x80,0x1a,0x06,0x00}; //400m
+char x[] = {0x80,0x1a,0x06,0x00}; //400m
 
 // extruder temp, default is 210 C for ABS
 char et[] = {0xd2,0x00}; // 210 C 
@@ -399,9 +399,9 @@ char bt[] = {0x5a,0x00}; //90C
 
 //Materials
 
-//char mt[] = {0x41}; //ABS
+char mt[] = {0x41}; //ABS
 //char mt[] = {0x50}; //PLA
-char mt[] = {0x46}; //Flex
+//char mt[] = {0x46}; //Flex
 
 
 byte sr;
@@ -427,13 +427,13 @@ void loop() {
   Serial.println("Reading the Davinci EEPROM Contents...");
   dump_eeprom(0,128);
   //dump_eeprom(116,4);
-	
+  
   //Read the serial number - added by Matt
   byte buf[20];
   memset(buf,0,20);
   status(unio.read(buf,SN,12));
   //Increment the serial number
-  IncrementSerial(&buf[0], 0, 12);	
+  IncrementSerial(&buf[0], 0, 12);  
 
   Serial.println("Press enter to update EEPROM...");
   while(!Serial.available());
@@ -465,4 +465,3 @@ void loop() {
   digitalWrite(led, HIGH);   // turn the LED on
   delay(10000);              // wait for ten seconds 
 }
-
